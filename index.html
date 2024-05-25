@@ -10,10 +10,35 @@
     <header>
         <div class="container">
             <h1>My Video Sharing Website</h1>
+            <!-- Add links to toggle between login and register forms -->
+            <div id="auth-links">
+                <a href="#" id="login-link">Login</a> / <a href="#" id="register-link">Register</a>
+            </div>
         </div>
     </header>
     <main>
         <div class="container">
+            <!-- Login form -->
+            <section id="login-form" style="display: none;">
+                <h2>Login</h2>
+                <form id="login-form">
+                    <input type="text" id="login-username" placeholder="Username">
+                    <input type="password" id="login-password" placeholder="Password">
+                    <button type="submit">Login</button>
+                </form>
+            </section>
+            
+            <!-- Register form -->
+            <section id="register-form" style="display: none;">
+                <h2>Register</h2>
+                <form id="register-form">
+                    <input type="text" id="register-username" placeholder="Username">
+                    <input type="password" id="register-password" placeholder="Password">
+                    <button type="submit">Register</button>
+                </form>
+            </section>
+            
+            <!-- Video container (will be populated dynamically) -->
             <section id="video-container"></section>
         </div>
     </main>
