@@ -1,27 +1,74 @@
-// This is where you would handle fetching video data from the backend and dynamically populate the video-container
-// For demonstration purposes, let's simulate some video data
-const videos = [
-    { id: 1, title: "Video 1", thumbnail: "thumbnail1.jpg" },
-    { id: 2, title: "Video 2", thumbnail: "thumbnail2.jpg" },
-    { id: 3, title: "Video 3", thumbnail: "thumbnail3.jpg" },
-    // Add more video objects as needed
-];
-
-// Function to render video thumbnails
-function renderVideos() {
-    const videoContainer = document.getElementById("video-container");
-    videoContainer.innerHTML = ""; // Clear previous content
-
-    videos.forEach(video => {
-        const videoElement = document.createElement("div");
-        videoElement.classList.add("video-thumbnail");
-        videoElement.innerHTML = `
-            <img src="${video.thumbnail}" alt="${video.title}">
-            <p class="video-title">${video.title}</p>
-        `;
-        videoContainer.appendChild(videoElement);
+// Check if the user is logged in and display the username
+function checkLoggedIn() {
+    fetch("/check-login")
+    .then(response => response.json())
+    .then(data => {
+        if (data.loggedIn) {
+            alert(`You are logged in as ${data.username}`);
+        } else {
+            alert("You are logged out");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again later.");
     });
 }
 
-// Call the function to render videos when the page loads
-window.addEventListener("load", renderVideos);
+// Event listener for login form submission
+document.getElementById("login-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const username = document.getElementById("login-username").value;
+    const password = document.getElementById("login-password").value;
+    login(username, password);
+});
+
+// Event listener for logout button
+document.getElementById("logout-button").addEventListener("click", function() {
+    logout();
+});
+
+// Function to handle user login
+function login(username, password) {
+    fetch("/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ username, password })
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Login successful");
+            checkLoggedIn();
+        } else {
+            alert("Login failed");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again later.");
+    });
+}
+
+// Function to handle user logout
+function logout() {
+    fetch("/logout", {
+        method: "POST"
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Logout successful");
+            checkLoggedIn();
+        } else {
+            alert("Logout failed");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again later.");
+    });
+}
+
+// Call checkLoggedIn when the page loads
+window.addEventListener("load", checkLoggedIn);
