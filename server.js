@@ -6,8 +6,26 @@ const port = 3000;
 // Dummy user data stored in memory (in production, use a database)
 let users = [];
 
+// Middleware to serve static files (HTML, CSS, JS)
+app.use(express.static("public"));
+
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
+
+// Route for serving the home page
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/index.html");
+});
+
+// Route for serving the login page
+app.get("/login", (req, res) => {
+    res.sendFile(__dirname + "/login.html");
+});
+
+// Route for serving the register page
+app.get("/register", (req, res) => {
+    res.sendFile(__dirname + "/register.html");
+});
 
 // Route for user registration
 app.post("/register", (req, res) => {
