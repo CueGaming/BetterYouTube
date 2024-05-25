@@ -1,27 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Video Sharing Website</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <div class="container">
-            <h1>My Video Sharing Website</h1>
-        </div>
-    </header>
-    <main>
-        <div class="container">
-            <section id="video-container"></section>
-        </div>
-    </main>
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 My Video Sharing Website</p>
-        </div>
-    </footer>
-    <script src="script.js"></script>
-</body>
-</html>
+/* Reset styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a; /* Dark background color */
+    color: #ccc; /* Text color */
+    line-height: 1.6;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+header, footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+header h1, footer p {
+    margin: 0;
+}
+
+main {
+    padding: 2rem 0;
+}
+
+/* Video styles */
+#video-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-gap: 1.5rem;
+}
+
+.video-thumbnail {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.video-thumbnail:hover {
+    transform: translateY(-5px);
+}
+
+.video-thumbnail img {
+    width: 100%;
+    height: auto;
+}
+
+.video-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    color: #fff;
+    text-align: center;
+}
