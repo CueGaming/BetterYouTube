@@ -1,10 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const multer = require("multer"); // For handling file uploads
+const path = require("path");
 const app = express();
 const port = 3000;
 
-// Dummy user data stored in memory (in production, use a database)
+// Dummy user and video data stored in memory (in production, use a database)
 let users = [];
+let videos = [];
 
 // Middleware to serve static files (HTML, CSS, JS)
 app.use(express.static("public"));
@@ -12,8 +16,23 @@ app.use(express.static("public"));
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
 
+// Middleware to parse cookies
+app.use(cookieParser());
+
+// Middleware to handle file uploads
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+const upload = multer({ storage: storage });
+
 // Route for serving the home page
 app.get("/", (req, res) => {
+    const username = req.cookies.username || "guest";
     res.sendFile(__dirname + "/index.html");
 });
 
@@ -48,7 +67,38 @@ app.post("/login", (req, res) => {
     if (!user) {
         return res.status(401).json({ message: "Invalid username or password" });
     }
+    res.cookie("username", username);
     res.status(200).json({ message: "Login successful" });
+});
+
+// Route for user logout
+app.post("/logout", (req, res) => {
+    res.clearCookie("username");
+    res.status(200).json({ message: "Logout successful" });
+});
+
+// Route for uploading videos
+app.post("/upload", upload.single("video"), (req, res) => {
+    const { username } = req.cookies;
+    const video = {
+        username: username || "guest",
+        filename: req.file.filename,
+        path: req.file.path
+    };
+    videos.push(video);
+    res.status(200).json({ message: "Video uploaded successfully" });
+});
+
+// Route for getting all videos
+app.get("/videos", (req, res) => {
+    res.json(videos);
+});
+
+// Route for getting user's videos
+app.get("/user/:username/videos", (req, res) => {
+    const { username } = req.params;
+    const userVideos = videos.filter(video => video.username === username);
+    res.json(userVideos);
 });
 
 app.listen(port, () => {
